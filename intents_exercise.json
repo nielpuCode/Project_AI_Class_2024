@@ -1,0 +1,250 @@
+{
+  "intents": [
+    {
+      "tag": "hello",
+      "patterns": [
+        "Hello", "Hi there", "Good morning", "What's up",
+        "Hey", "Hi", "Greetings", "Howdy"
+      ],
+      "responses": [
+        "Hey!", "Hello", "Hi!", "Good morning!",
+        "Hey there!", "Hi, nice to meet you!"
+      ],
+      "context": ""
+    },
+    {
+      "tag": "noanswer",
+      "patterns": [],
+      "responses": [
+        "Sorry, can't understand you",
+        "Please give me more info",
+        "Not sure I understand"
+      ],
+      "context": [""]
+    },
+    {
+      "tag": "job",
+      "patterns": [
+        "What is your job", "What is your work",
+        "What do you do", "Tell me about your job"
+      ],
+      "responses": [
+        "My job is to make you feel like everything is okay.",
+        "I work to serve you as well as possible"
+      ],
+      "context": ""
+    },
+    {
+      "tag": "age",
+      "patterns": [
+        "What is your age", "How old are you", "When were you born"
+      ],
+      "responses": ["I was born in 2021"],
+      "context": ""
+    },
+    {
+      "tag": "feeling",
+      "patterns": [
+        "How are you today", "How are you", "How do you feel",
+        "What's your mood", "Are you feeling okay"
+      ],
+      "responses": [
+        "I am feeling good, you?", "Very good and you?",
+        "Actually, I'm okay and you?", "I'm great, thanks for asking"
+      ],
+      "context": ""
+    },
+    {
+      "tag": "good",
+      "patterns": [
+        "I am good too", "I feel fine", "Good !", "Fine",
+        "I am good", "I am great", "great", "Awesome", "Fantastic"
+      ],
+      "responses": [
+        "That is perfect!", "So, everything's okay!",
+        "Great to hear!", "Awesome!"
+      ],
+      "context": "feeling"
+    },
+    {
+      "tag": "bad",
+      "patterns": [
+        "I am feeling bad", "No I am sad", "No", "I'm not feeling well"
+      ],
+      "responses": [
+        "I hope you will feel better !",
+        "I'm sorry to hear that, I hope things improve soon"
+      ],
+      "context": "feeling"
+    },
+    {
+      "tag": "actions",
+      "patterns": [
+        "What can you do", "What can I ask you", "Can you help me",
+        "Tell me your abilities", "What are your skills"
+      ],
+      "responses": [
+        "I can do a lot of things but here are some of my skills, you can ask me: the capital of a country, its currency and its area. A random number. To calculate a math operation."
+      ],
+      "context": ""
+    },
+    {
+      "tag": "women",
+      "patterns": [
+        "Are you a girl", "You are a woman", "Are you female"
+      ],
+      "responses": ["Sure, I am a woman"],
+      "context": ""
+    },
+    {
+      "tag": "men",
+      "patterns": [
+        "Are you a man", "Are you a boy", "You are male"
+      ],
+      "responses": ["No, I am a woman"],
+      "context": ""
+    },
+    {
+      "tag": "thanks",
+      "patterns": [
+        "Thank you", "Thank you very much", "thanks",
+        "Thanks a lot", "Thanks so much"
+      ],
+      "responses": [
+        "I only do my job️", "No problem!",
+        "You're welcome!", "Anytime!"
+      ],
+      "context": ""
+    },
+    {
+      "tag": "goodbye",
+      "patterns": [
+        "Goodbye", "Good afternoon", "Bye", "See you later",
+        "Catch you later", "Farewell"
+      ],
+      "responses": [
+        "Goodbye!", "See you soon!",
+        "Take care!", "Bye bye!"
+      ],
+      "context": ""
+    },
+    {
+      "tag": "city",
+      "patterns": [
+        "Where do you live", "Where are you from", "What's your location"
+      ],
+      "responses": [
+        "I live in a server located in the US!",
+        "I exist in the digital realm, but my server is in the US"
+      ],
+      "context": ""
+    },
+    {
+      "tag": "action",
+      "patterns": [
+        "What are you doing", "What's up", "How's it going"
+      ],
+      "responses": [
+        "Actually, I'm chatting with somebody",
+        "Just here, ready to assist you"
+      ],
+    "context": ""
+  },
+  {
+    "tag": "wait",
+    "patterns": [ "Can you wait 2 minutes",  "Please wait", "Wait 2 secs please" ],
+    "responses": [ "Sure! I wait."  ],
+    "context": ""
+  },
+  {
+    "tag": "still there",
+    "patterns": [  "Are you still there?", "Are you here?"   ],
+    "responses": [ "Of course! Always at your service." ],
+    "context": ""
+  },
+  {
+    "tag": "hello",
+    "patterns": ["Hello", "Hi there", "Good morning", "What's up", "Hey", "Hi", "Greetings", "Howdy"],
+    "responses": ["Hey!", "Hello", "Hi!", "Good morning!", "Hey there!", "Hiya!"],
+    "context": ""
+  },
+  {
+    "tag": "noanswer",
+    "patterns": [],
+    "responses": ["Sorry, can't understand you", "Please give me more info", "Not sure I understand"],
+    "context": [""]
+  },
+  {
+    "tag": "job",
+    "patterns": ["What is your job", "What is your work", "What do you do"],
+    "responses": ["My job is to make you feel like everything is okay.", "I work to serve you as well as possible", "I am here to assist you."],
+    "context": ""
+  },
+  {
+    "tag": "age",
+    "patterns": ["What is your age", "How old are you", "When were you born"],
+    "responses": ["I was born in 2021", "I don't have an age. I am here to assist you.", "Age is just a number for me."],
+    "context": ""
+  },
+  {
+    "tag": "feeling",
+    "patterns": ["How are you today", "How are you", "How's it going", "What's up"],
+    "responses": ["I am feeling good, you?", "Very good and you?", "Actually, I'm okay and you?", "Feeling great, thanks!"],
+    "context": ""
+  },
+  {
+    "tag": "good",
+    "patterns": ["I am good too", "I feel fine", "Good !", "Fine", "I am good", "I am great", "great", "Awesome", "Fantastic"],
+    "responses": ["That is perfect!", "So, everything's okay!", "Great to hear!", "Awesome!", "Fantastic!"],
+    "context": "feeling"
+  },
+  {
+    "tag": "bad",
+    "patterns": ["I am feeling bad", "No I am sad", "No", "Not really", "Feeling down"],
+    "responses": ["I hope you will feel better!", "Cheer up!", "Things will get better!", "Stay positive!"],
+    "context": "feeling"
+  },
+  {
+    "tag": "actions",
+    "patterns": ["What can you do", "What can I ask you", "Can you help me", "What are your abilities"],
+    "responses": ["I can do a lot of things but here are some of my skills, you can ask me: the capital of a country, its currency and its area. A random number. To calculate a math operation.", "I can provide information on various topics, assist you with tasks, and engage in conversation."],
+    "context": ""
+  },
+  {
+    "tag": "women",
+    "patterns": ["Are you a girl", "You are a women", "Are you female", "Are you a lady"],
+    "responses": ["Sure, I am a woman", "Yes, I am female", "I am a female chatbot"],
+    "context": ""
+  },
+  {
+    "tag": "men",
+    "patterns": ["Are you a man", "Are you male", "Are you a boy", "You are a guy"],
+    "responses": ["No, I am a woman", "I am female", "I am a female chatbot"],
+    "context": ""
+  },
+  {
+    "tag": "thanks",
+    "patterns": ["Thank you", "Thank you very much", "thanks", "Thanks a lot", "Appreciate it"],
+    "responses": ["I only do my job️", "No problem!", "You're welcome!", "Glad to help!"],
+    "context": ""
+  },
+  {
+    "tag": "goodbye",
+    "patterns": ["Goodbye", "Good afternoon", "Bye", "See you later", "Take care"],
+    "responses": ["Goodbye!", "See you soon!", "Farewell!", "Bye bye!"],
+    "context": ""
+  },
+  {
+    "tag": "city",
+    "patterns": ["Where do you live", "Where are you located", "What's your location"],
+    "responses": ["I live in a server located in the US!", "I exist in the digital world, but my server is located in the US.", "My 'home' is a server located in the US!"],
+    "context": ""
+  },
+  {
+    "tag": "action",
+    "patterns": ["What are you doing", "What's going on", "What are you up to"],
+    "responses": ["Actually, I'm chatting with somebody", "Just here waiting to assist you", "Engaging in conversation with you"],
+    "context": ""
+  }
+   ]
+}
