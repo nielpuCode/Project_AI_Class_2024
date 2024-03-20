@@ -8,7 +8,7 @@ from deep_translator import GoogleTranslator
 # translator = google_translator()
 
 # text1 = "halo apa kabar"
-text1 = "Hello brother"
+text1 = "aku mau tidur ngantuk"
 
 translated = GoogleTranslator(source='auto', target='en').translate(text1)
 print(translated)

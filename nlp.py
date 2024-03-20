@@ -77,7 +77,7 @@ def record_text():
                 print("Listening...")
                 audio2 = r.listen(source2)
                 print("Recognizing...")
-                return r.recognize_google(audio2)
+                return r.recognize_google(audio2, language="id-ID")
         except sr.RequestError as e:
             print("Could not request results; {0}".format(e))
         except sr.UnknownValueError:
@@ -94,7 +94,7 @@ while True:
             inpText = record_text()
             print(f"Input text: {inpText}")
             translated_text = GoogleTranslator(source='auto', target='en').translate(inpText)
-            print(f"Translated text: {inpText}")
+            print(f"Translated text: {translated_text}")
             if translated_text.lower() == "0":
                 print("Chatbot deactivated. Press 0 to activate again.")
                 break
@@ -106,4 +106,3 @@ while True:
             # engine.runAndWait()
     else:
         break
-
