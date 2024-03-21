@@ -67,9 +67,54 @@ def get_response(intents_list, intents_json):
                 break
         return result
 
-r = sr.Recognizer()
+#Original code: ------------------------------------------------------------------------------------------------
+# r = sr.Recognizer()
+
+# def record_text():
+#     while True:
+#         try:
+#             with sr.Microphone() as source2:
+#                 r.adjust_for_ambient_noise(source2, duration=1)
+#                 print("Listening...")
+#                 audio2 = r.listen(source2)
+#                 print("Recognizing...")
+#                 return r.recognize_google(audio2, language="id-ID")
+#         except sr.RequestError as e:
+#             print("Could not request results; {0}".format(e))
+#         except sr.UnknownValueError:
+#             print("Unknown error occurred")
+
+
+# while True:
+#     clear()
+#     print("press 0 if you want to talk with the chatbot, or press any other key to exit")
+#     choice = input()
+#     if choice == "0":
+#         print("chatbot activated")
+#         while True:
+#             inpText = record_text()
+#             print(f"Input text: {inpText}")
+#             translated_text = GoogleTranslator(source='auto', target='en').translate(inpText)
+#             print(f"Translated text: {translated_text}")
+#             if translated_text.lower() == "0":
+#                 print("Chatbot deactivated. Press 0 to activate again.")
+#                 break
+#             intents = pred_class(translated_text, words, classes, model)
+#             result = get_response(intents, data)
+#             print("Response:", result)
+#             # engine = pyttsx3.init()
+#             # engine.say(result)
+#             # engine.runAndWait()
+#     else:
+#         break
+#---------------------------------------------------------------------------------------------------------------
+
+import pyttsx3
+import speech_recognition as sr
+import re
 
 def record_text():
+    r = sr.Recognizer()
     while True:
         try:
             with sr.Microphone() as source2:
@@ -77,32 +122,45 @@ def record_text():
                 print("Listening...")
                 audio2 = r.listen(source2)
                 print("Recognizing...")
-                return r.recognize_google(audio2, language="id-ID")
+                return r.recognize_google(audio2)
         except sr.RequestError as e:
             print("Could not request results; {0}".format(e))
         except sr.UnknownValueError:
             print("Unknown error occurred")
 
+def perform_math_operation(inpText):
+    inpText = re.sub(r'[^0-9+\-*/]', '', inpText)
+    print("Text:", inpText)
+    try:
+        resultCalc = eval(inpText)
+        text_to_speech = f"the result of {inpText} is {resultCalc}"
+        engine.say(text_to_speech)
+        engine.runAndWait()
+        return text_to_speech
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+engine = pyttsx3.init()
 
 while True:
-    clear()
     print("press 0 if you want to talk with the chatbot, or press any other key to exit")
     choice = input()
     if choice == "0":
         print("chatbot activated")
         while True:
             inpText = record_text()
-            print(f"Input text: {inpText}")
-            translated_text = GoogleTranslator(source='auto', target='en').translate(inpText)
-            print(f"Translated text: {translated_text}")
-            if translated_text.lower() == "0":
+            if "calculate " in inpText.lower():
+                mathOperation = inpText.lower().replace("calculate ", "")
+                print(perform_math_operation(mathOperation))
+            elif inpText.lower() == "0":
                 print("Chatbot deactivated. Press 0 to activate again.")
                 break
-            intents = pred_class(translated_text, words, classes, model)
-            result = get_response(intents, data)
-            print("Response:", result)
-            # engine = pyttsx3.init()
-            # engine.say(result)
-            # engine.runAndWait()
+            else:
+                intents = pred_class(inpText, words, classes, model)
+                result = get_response(intents, data)
+                print(result)
+                engine.say(result)
+                engine.runAndWait()
     else:
         break
+
