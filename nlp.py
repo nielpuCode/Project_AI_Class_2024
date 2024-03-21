@@ -110,8 +110,9 @@ def get_response(intents_list, intents_json):
 #---------------------------------------------------------------------------------------------------------------
 
 import pyttsx3
-import speech_recognition as sr
 import re
+import speech_recognition as sr
+
 
 def record_text():
     r = sr.Recognizer()
