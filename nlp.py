@@ -118,12 +118,13 @@ def record_text():
     r = sr.Recognizer()
     while True:
         try:
-            with sr.Microphone() as source2:
-                r.adjust_for_ambient_noise(source2, duration=1)
+            with sr.Microphone() as main_mic:
+                r.adjust_for_ambient_noise(main_mic, duration=1)
                 print("Listening...")
-                audio2 = r.listen(source2)
+                input_audio = r.listen(main_mic)
                 print("Recognizing...")
-                return r.recognize_google(audio2)
+                return r.recognize_google(input_audio)
+
         except sr.RequestError as e:
             print("Could not request results; {0}".format(e))
         except sr.UnknownValueError:
