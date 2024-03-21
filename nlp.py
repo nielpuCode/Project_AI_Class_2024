@@ -110,8 +110,11 @@ def get_response(intents_list, intents_json):
 #---------------------------------------------------------------------------------------------------------------
 
 import pyttsx3
-import speech_recognition as sr
 import re
+import speech_recognition as sr
+import requests
+from bs4 import BeautifulSoup
+
 
 def record_text():
     r = sr.Recognizer()
@@ -131,7 +134,6 @@ def record_text():
 
 def perform_math_operation(inpText):
     inpText = re.sub(r'[^0-9+\-*/]', '', inpText)
-    print("Text:", inpText)
     try:
         resultCalc = eval(inpText)
         text_to_speech = f"the result of {inpText} is {resultCalc}"
@@ -140,6 +142,39 @@ def perform_math_operation(inpText):
         return text_to_speech
     except Exception as e:
         return f"Error: {str(e)}"
+
+def extract_city(text):
+    city = ""
+    words = text.split()
+    try:
+        index = words.index("in")
+        if index + 1 < len(words):
+            if index + 2 < len(words):
+                if words[index + 2].istitle():
+                    city = words[index + 1] + " " + words[index + 2]
+                else:
+                    city = words[index + 1]
+            else:
+                city = words[index + 1]
+    except ValueError:
+        pass
+    return city
+
+def get_weather(city):
+    url = "https://www.google.com/search?q=weather+" + city + "&hl=en"
+    html = requests.get(url).content
+    soup = BeautifulSoup(html, 'html.parser')
+    temp = soup.find('div', attrs={'class': 'BNeawe iBp4i AP7Wnd'}).text
+    str = soup.find('div', attrs={'class': 'BNeawe tAd8D AP7Wnd'}).text
+    data = str.split('\n')
+    time = data[0]
+    sky = data[1]
+    listdiv = soup.findAll('div', attrs={'class': 'BNeawe s3v9rd AP7Wnd'})
+    strd = listdiv[5].text
+    pos = strd.find('Wind')
+    other_data = strd[pos:]
+    weather_info = f"\nTemperature is {temp}\nTime: {time}\nSky Description: {sky}\n{other_data}\n"
+    return weather_info
 
 engine = pyttsx3.init()
 
@@ -150,10 +185,21 @@ while True:
         print("chatbot activated")
         while True:
             inpText = record_text()
-            if "calculate " in inpText.lower():
+            print(inpText)
+            if "weather in" in inpText:
+                city = extract_city(inpText)
+                if city:
+                    print(f"Weather in {city}:")
+                    weather_info = get_weather(city)
+                    print(weather_info)
+                    engine.say(weather_info)
+                    engine.runAndWait()
+                else:
+                    print("City not specified.")
+            elif "calculate " in inpText.lower():
                 mathOperation = inpText.lower().replace("calculate ", "")
                 print(perform_math_operation(mathOperation))
-            elif inpText.lower() == "0":
+            elif inpText == "0":
                 print("Chatbot deactivated. Press 0 to activate again.")
                 break
             else:
@@ -164,4 +210,3 @@ while True:
                 engine.runAndWait()
     else:
         break
-
