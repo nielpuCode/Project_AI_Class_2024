@@ -269,6 +269,11 @@
     "patterns": ["What are you doing", "What's going on", "What are you up to"],
     "responses": ["Actually, I'm chatting with somebody", "Just here waiting to assist you", "Engaging in conversation with you"],
     "context": ""
+  },
+  {
+    "tag": "terminate",
+    "patterns": ["Terminate the program", "End the program", "Quit"],
+    "responses": ["Terminating the program...", "Goodbye!"]
   }
    ]
 }

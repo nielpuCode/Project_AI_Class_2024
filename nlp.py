@@ -156,6 +156,7 @@ def process_speech_input():
     global terminate_program  # Declare terminate as flag
     global engine  # Declare engine as global
     
+<<<<<<< HEAD
     with sr.Microphone() as source:
         r.adjust_for_ambient_noise(source, duration=1)
         audio = r.listen(source)
@@ -205,11 +206,68 @@ def process_speech_input():
         conversation.see(customtkinter.END)  # Scroll to the end of the conversation
     
     
+=======
+    while not terminate_program:  # Continue listening until termination flag is set
+        conversation.insert(customtkinter.END, "Chatbot: Listening...\n")
+        conversation.see(customtkinter.END)  # Scroll to the end of the conversation
+        with sr.Microphone() as source:
+            r.adjust_for_ambient_noise(source, duration=1)
+            audio = r.listen(source)
+        try:
+            conversation.insert(customtkinter.END, "Chatbot: Recognizing...\n")
+            conversation.see(customtkinter.END)  # Scroll to the end of the conversation
+            text = r.recognize_google(audio, language="en-US")
+            conversation.insert(customtkinter.END, "User: " + text + "\n")
+            conversation.see(customtkinter.END)  # Scroll to the end of the conversation
+            translated_text = GoogleTranslator(source='auto', target='en').translate(text)
+            intents = pred_class(translated_text, words, classes, model)
+            if "terminate" in translated_text.lower():
+                conversation.insert(customtkinter.END, "Chatbot: Terminating the program...\n")
+                conversation.see(customtkinter.END)  # Scroll to the end of the conversation
+                terminate_program = True  # Set the flag to terminate
+            elif "calculate " in translated_text.lower():
+                math_operation = translated_text.lower().replace("calculate ", "")
+                conversation.insert(customtkinter.END, f"Chatbot: Calculating {math_operation}...\n")
+                conversation.see(customtkinter.END)  # Scroll to the end of the conversation
+                result = perform_math_operation(math_operation)
+                conversation.insert(customtkinter.END, result + "\n\n")
+                conversation.see(customtkinter.END)  # Scroll to the end of the conversation
+            elif "weather in" in text:
+                city = extract_city(text)
+                if city:
+                    conversation.insert(customtkinter.END, f"Chatbot: Weather in {city}:\n")
+                    conversation.see(customtkinter.END)  # Scroll to the end of the conversation
+                    weather_info = get_weather(city)
+                    conversation.insert(customtkinter.END, weather_info + "\n")
+                    conversation.see(customtkinter.END)  # Scroll to the end of the conversation
+                    engine.say(weather_info)
+                    engine.runAndWait()
+                else:
+                    conversation.insert(customtkinter.END, "Chatbot: City not specified.\n")
+                    conversation.see(customtkinter.END)  # Scroll to the end of the conversation
+            else:
+                response = get_response(intents, data)
+                conversation.insert(customtkinter.END, "Chatbot: " + response + "\n\n")
+                conversation.see(customtkinter.END)  # Scroll to the end of the conversation
+                engine.say(response)
+                engine.runAndWait()
+        except sr.UnknownValueError:
+            conversation.insert(customtkinter.END, "Chatbot: Sorry, I could not understand the audio.\n\n")
+            conversation.see(customtkinter.END)  # Scroll to the end of the conversation
+        except sr.RequestError as e:
+            conversation.insert(customtkinter.END, "Chatbot: Could not request results from Google Speech Recognition service; {0}\n\n".format(e))
+            conversation.see(customtkinter.END)  # Scroll to the end of the conversation
+
+>>>>>>> 1b2a04442e1ab428f0d48e9e2120cb87664a7de6
     # Check if the termination flag is set
     if terminate_program:
         root.destroy()  # Terminate the GUI application
         exit()  # Terminate the program
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 1b2a04442e1ab428f0d48e9e2120cb87664a7de6
 # Define function to activate the program
 def activate_chatbot():
     global terminate_program  # Declare global flag
