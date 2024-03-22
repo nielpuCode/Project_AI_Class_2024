@@ -7,7 +7,7 @@ def clear():
 clear()
 
 # enter city name
-city = "jakarta"
+city = "london"
  
 # create url
 url = "https://www.google.com/search?q="+"weather"+city

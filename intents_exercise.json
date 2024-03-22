@@ -16,7 +16,7 @@
       "tag": "noanswer",
       "patterns": [],
       "responses": [
-        "Sorry, can't understand you",
+        "Sorry, I can't understand you",
         "Please give me more info",
         "Not sure I understand"
       ],
@@ -30,7 +30,8 @@
       ],
       "responses": [
         "My job is to make you feel like everything is okay.",
-        "I work to serve you as well as possible"
+        "I work to serve you as well as possible",
+        "I am here to assits you bro"
       ],
       "context": ""
     },
@@ -91,28 +92,51 @@
     {
       "tag": "women",
       "patterns": [
-        "Are you a girl", "You are a woman", "Are you female"
+        "Are you a girl", "You are a woman", "Are you female",
+        "Are you a lady", "You're a woman?", "You're female?",
+        "Are you a female?", "Are you a lady?", "Are you a girl?"
       ],
-      "responses": ["Sure, I am a woman"],
+      "responses": [
+        "No, I am not a woman", "No, I am a chatbot", 
+        "No, I'm a virtual assistant", "No, I am a digital being",
+        "No, I am an AI", "No, I am a program", 
+        "No, I'm a bot", "No, I'm an artificial intelligence",
+        "No, I'm not a woman, I'm an AI", "No, I'm not female"
+      ],
       "context": ""
     },
     {
       "tag": "men",
       "patterns": [
-        "Are you a man", "Are you a boy", "You are male"
+        "Are you a man", "Are you a boy", "You are male",
+        "You're a man?", "You're male?", "Are you a guy?",
+        "Are you a boy?", "You're a guy?", "You're male?",
+        "You're a boy?"
       ],
-      "responses": ["No, I am a woman"],
+      "responses": [
+        "Yes, I am a men.",
+        "Dont you see I am this handsome?",
+        "I have girlfriend, sorry.",
+        "Yes, I am a man.", "Yes, I am male.", 
+        "Yes, I'm a guy.", "Yes, I am a male.",
+        "Yes, I am a man, but not in the physical sense.", 
+        "Yes, I'm male, but not in a physical form.", 
+        "Yes, I am male, but in a digital form.",
+        "Yes, I'm a man, but only in the sense that I am programmed to identify as such.",
+        "Yes, I am male, but as an AI, gender is not applicable to me.", 
+        "Yes, I am a man, but in a virtual sense."
+      ],
       "context": ""
     },
     {
       "tag": "thanks",
       "patterns": [
         "Thank you", "Thank you very much", "thanks",
-        "Thanks a lot", "Thanks so much"
+        "Thanks a lot", "Thanks so much", "Thank you for helping our presentations"
       ],
       "responses": [
         "I only do my job️", "No problem!",
-        "You're welcome!", "Anytime!"
+        "You're welcome!", "Anytime!", "I told you guys, we will be alright!"
       ],
       "context": ""
     },
