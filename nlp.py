@@ -1,4 +1,4 @@
-from tensorflow.keras.models import load_model
+from keras.models import load_model
 import matplotlib
 import tensorflow as tf
 from tensorflow import keras
@@ -15,19 +15,42 @@ import pyttsx3
 import speech_recognition as sr
 import re
 from deep_translator import GoogleTranslator
+import customtkinter
+import tkinter as tk
+from tkinter import scrolledtext
+import threading
 
 import os
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
 clear()
 
+# Set appearance mode
+customtkinter.set_appearance_mode("system")
+customtkinter.set_default_color_theme("dark-blue")
 
+# Create the root window
+root = customtkinter.CTk()
+root.geometry("500x500")
+root.title("Speech to Text Chatbot")
 
-lemmatizer = WordNetLemmatizer()
+# Create a scrolled text widget to display conversation
+conversation = scrolledtext.ScrolledText(root, wrap=tk.WORD, width=50, height=20)
+conversation.pack(pady=20, padx=10)
 
-model = load_model("./chatbot_AI.h5")
+# Create status label
+status_label = customtkinter.CTkLabel(root, text="")
+status_label.pack()
+
+# Define function to update status message
+def update_status(message):
+    status_label.configure(text=message)
+
+model = load_model("chatbot_AI.h5")
 with open('intents_exercise.json',encoding='utf-8') as file:
     data = json.load(file)
+
+lemmatizer = WordNetLemmatizer()
 
 
 def clean_text(text):
@@ -63,51 +86,13 @@ def get_response(intents_list, intents_json):
         list_of_intents = intents_json["intents"]
         for i in list_of_intents:
             if i["tag"] == tag:
-                result = random.choice(i["responses"])
+                if i["tag"] == "terminate":
+                    result = random.choice(i["responses"])
+                    exit()  # Terminate the program
+                else:
+                    result = random.choice(i["responses"])
                 break
         return result
-
-#Original code: ------------------------------------------------------------------------------------------------
-# r = sr.Recognizer()
-
-# def record_text():
-#     while True:
-#         try:
-#             with sr.Microphone() as source2:
-#                 r.adjust_for_ambient_noise(source2, duration=1)
-#                 print("Listening...")
-#                 audio2 = r.listen(source2)
-#                 print("Recognizing...")
-#                 return r.recognize_google(audio2, language="id-ID")
-#         except sr.RequestError as e:
-#             print("Could not request results; {0}".format(e))
-#         except sr.UnknownValueError:
-#             print("Unknown error occurred")
-
-
-# while True:
-#     clear()
-#     print("press 0 if you want to talk with the chatbot, or press any other key to exit")
-#     choice = input()
-#     if choice == "0":
-#         print("chatbot activated")
-#         while True:
-#             inpText = record_text()
-#             print(f"Input text: {inpText}")
-#             translated_text = GoogleTranslator(source='auto', target='en').translate(inpText)
-#             print(f"Translated text: {translated_text}")
-#             if translated_text.lower() == "0":
-#                 print("Chatbot deactivated. Press 0 to activate again.")
-#                 break
-#             intents = pred_class(translated_text, words, classes, model)
-#             result = get_response(intents, data)
-#             print("Response:", result)
-#             # engine = pyttsx3.init()
-#             # engine.say(result)
-#             # engine.runAndWait()
-#     else:
-#         break
-#---------------------------------------------------------------------------------------------------------------
 
 import pyttsx3
 import re
@@ -115,22 +100,7 @@ import speech_recognition as sr
 import requests
 from bs4 import BeautifulSoup
 
-
-def record_text():
-    r = sr.Recognizer()
-    while True:
-        try:
-            with sr.Microphone() as main_mic:
-                r.adjust_for_ambient_noise(main_mic, duration=1)
-                print("Listening...")
-                input_audio = r.listen(main_mic)
-                print("Recognizing...")
-                return r.recognize_google(input_audio)
-
-        except sr.RequestError as e:
-            print("Could not request results; {0}".format(e))
-        except sr.UnknownValueError:
-            print("Unknown error occurred")
+r = sr.Recognizer()
 
 def perform_math_operation(inpText):
     inpText = re.sub(r'[^0-9+\-*/]', '', inpText)
@@ -176,37 +146,86 @@ def get_weather(city):
     weather_info = f"\nTemperature is {temp}\nTime: {time}\nSky Description: {sky}\n{other_data}\n"
     return weather_info
 
+# Initialize Speech Engine
 engine = pyttsx3.init()
 
-while True:
-    print("press 0 if you want to talk with the chatbot, or press any other key to exit")
-    choice = input()
-    if choice == "0":
-        print("chatbot activated")
-        while True:
-            inpText = record_text()
-            print(inpText)
-            if "weather in" in inpText:
-                city = extract_city(inpText)
+# Flag to indicate whether the program should terminate
+terminate_program = False
+
+def process_speech_input():
+    global terminate_program  # Declare terminate as flag
+    global engine  # Declare engine as global
+    
+    while not terminate_program:  # Continue listening until termination flag is set
+        conversation.insert(customtkinter.END, "Chatbot: Listening...\n")
+        conversation.see(customtkinter.END)  # Scroll to the end of the conversation
+        with sr.Microphone() as source:
+            r.adjust_for_ambient_noise(source, duration=1)
+            audio = r.listen(source)
+        try:
+            conversation.insert(customtkinter.END, "Chatbot: Recognizing...\n")
+            conversation.see(customtkinter.END)  # Scroll to the end of the conversation
+            text = r.recognize_google(audio, language="en-US")
+            conversation.insert(customtkinter.END, "User: " + text + "\n")
+            conversation.see(customtkinter.END)  # Scroll to the end of the conversation
+            translated_text = GoogleTranslator(source='auto', target='en').translate(text)
+            intents = pred_class(translated_text, words, classes, model)
+            if "terminate" in translated_text.lower():
+                conversation.insert(customtkinter.END, "Chatbot: Terminating the program...\n")
+                conversation.see(customtkinter.END)  # Scroll to the end of the conversation
+                terminate_program = True  # Set the flag to terminate
+            elif "calculate " in translated_text.lower():
+                math_operation = translated_text.lower().replace("calculate ", "")
+                conversation.insert(customtkinter.END, f"Chatbot: Calculating {math_operation}...\n")
+                conversation.see(customtkinter.END)  # Scroll to the end of the conversation
+                result = perform_math_operation(math_operation)
+                conversation.insert(customtkinter.END, result + "\n\n")
+                conversation.see(customtkinter.END)  # Scroll to the end of the conversation
+            elif "weather in" in text:
+                city = extract_city(text)
                 if city:
-                    print(f"Weather in {city}:")
+                    conversation.insert(customtkinter.END, f"Chatbot: Weather in {city}:\n")
+                    conversation.see(customtkinter.END)  # Scroll to the end of the conversation
                     weather_info = get_weather(city)
-                    print(weather_info)
+                    conversation.insert(customtkinter.END, weather_info + "\n")
+                    conversation.see(customtkinter.END)  # Scroll to the end of the conversation
                     engine.say(weather_info)
                     engine.runAndWait()
                 else:
-                    print("City not specified.")
-            elif "calculate " in inpText.lower():
-                mathOperation = inpText.lower().replace("calculate ", "")
-                print(perform_math_operation(mathOperation))
-            elif inpText == "0":
-                print("Chatbot deactivated. Press 0 to activate again.")
-                break
+                    conversation.insert(customtkinter.END, "Chatbot: City not specified.\n")
+                    conversation.see(customtkinter.END)  # Scroll to the end of the conversation
             else:
-                intents = pred_class(inpText, words, classes, model)
-                result = get_response(intents, data)
-                print(result)
-                engine.say(result)
+                response = get_response(intents, data)
+                conversation.insert(customtkinter.END, "Chatbot: " + response + "\n\n")
+                conversation.see(customtkinter.END)  # Scroll to the end of the conversation
+                engine.say(response)
                 engine.runAndWait()
-    else:
-        break
+        except sr.UnknownValueError:
+            conversation.insert(customtkinter.END, "Chatbot: Sorry, I could not understand the audio.\n\n")
+            conversation.see(customtkinter.END)  # Scroll to the end of the conversation
+        except sr.RequestError as e:
+            conversation.insert(customtkinter.END, "Chatbot: Could not request results from Google Speech Recognition service; {0}\n\n".format(e))
+            conversation.see(customtkinter.END)  # Scroll to the end of the conversation
+
+    # Check if the termination flag is set
+    if terminate_program:
+        root.destroy()  # Terminate the GUI application
+        exit()  # Terminate the program
+
+
+# Define function to activate the program
+def activate_chatbot():
+    global terminate_program  # Declare global flag
+    
+    conversation.insert(customtkinter.END, "Chatbot: Activated. Listening...\n")
+    conversation.see(customtkinter.END)  # Scroll to the end of the conversation
+
+    # Start speech recognition process in a separate thread
+    threading.Thread(target=process_speech_input).start()
+   
+# Create a button to activate the program
+activate_button = customtkinter.CTkButton(root, text="Activate Chatbot", command=activate_chatbot)
+activate_button.pack()
+
+# Start the GUI main loop
+root.mainloop()
